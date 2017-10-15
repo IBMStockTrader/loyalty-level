@@ -2,7 +2,7 @@ This service determines the loyalty level of a given portfolio owner, based on t
 
 Currently the set of loyalty levels includes *Basic*, *Bronze*, *Silver*, *Gold*, and *Platinum*.
 
-When it detects a change in level, it does a POST to an **OpenWhisk** action sequence, which builds a message and posts it to a **Slack** channel (#slack-test on ibm-cloud.slack.com).
+When it detects a change in level, it does a POST to an **OpenWhisk** action sequence, which builds a message and posts it to a **Slack** channel (*#slack-test* on *ibm-cloud.slack.com*).
 
 This service expects query params named *owner*, *total*, and *loyalty* (the current loyalty level).  It returns a **JSON** object containing the owner and their loyalty.
 
