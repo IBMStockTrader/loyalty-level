@@ -23,6 +23,7 @@ spec:
     metadata:
       labels:
         app: loyalty-level
+        version: v1
     spec:
       containers:
       - name: loyalty-level
