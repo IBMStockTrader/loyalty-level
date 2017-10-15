@@ -1,0 +1,8 @@
+type: route-rule
+name: loyalty-level-default
+spec:
+  destination: loyalty-level.default.svc.cluster.local
+  precedence: 1
+  route:
+  - tags:
+      version: v1
