@@ -1,8 +1,11 @@
-type: route-rule
-name: loyalty-level-default
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: loyalty-level-default
 spec:
-  destination: loyalty-level.default.svc.cluster.local
+  destination:
+    name: loyalty-level
   precedence: 1
   route:
-  - tags:
+  - labels:
       version: v1
