@@ -55,7 +55,7 @@ spec:
               key: queue
               name: mq
         image: loyalty-level:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: loyalty-level
         ports:
         - containerPort: 9080
@@ -160,7 +160,7 @@ metadata:
   labels:
     app: loyalty-level
 spec:
-  type: NodePort
+# type: NodePort
   ports:
     - port: 9080
 #     nodePort: 31003
