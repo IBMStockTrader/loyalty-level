@@ -66,7 +66,7 @@ spec:
                 key: queue
         ports:
           - containerPort: 9080
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
 ---
 #Deploy the service
 apiVersion: v1
