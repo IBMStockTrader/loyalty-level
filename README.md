@@ -6,4 +6,4 @@ When it detects a change in level, it does a POST to an **OpenWhisk** action seq
 
 This service expects query params named *owner*, *total*, and *loyalty* (the current loyalty level).  It returns a **JSON** object containing the owner and their loyalty.
 
-For example, if you did a GET to http://localhost:9080/loyalty-level?owner=John&total=123456.78&loyalty=Silver, it would return {"owner": "John", "loyalty": "Gold"}, and would post the following message to **Slack**: "John has changed status from Silver to Gold."
+For example, if you did a GET to http://localhost:9080/loyalty-level?owner=John&total=123456.78&loyalty=Silver, it would return `{"owner": "John", "loyalty": "Gold"}`, and would post the following message to **Slack**: "John has changed status from Silver to Gold."
