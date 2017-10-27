@@ -160,7 +160,7 @@ metadata:
   labels:
     app: loyalty-level
 spec:
-# type: NodePort
+  type: NodePort
   ports:
     - port: 9080
 #     nodePort: 31003
