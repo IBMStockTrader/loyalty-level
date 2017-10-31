@@ -79,6 +79,7 @@ spec:
   type: NodePort
   ports:
     - port: 9080
+      name: http
 #     nodePort: 31003
   selector:
     app: loyalty-level
