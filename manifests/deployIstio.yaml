@@ -160,7 +160,7 @@ metadata:
   labels:
     app: loyalty-level
 spec:
-  type: NodePort
+# type: NodePort
   ports:
     - port: 9080
       name: http
@@ -179,7 +179,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /.*
+      - path: /loyalty-level
         backend:
           serviceName: loyalty-level-service
           servicePort: 9080
