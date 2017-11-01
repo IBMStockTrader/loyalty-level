@@ -179,7 +179,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /loyalty-level
+      - path: /.*
         backend:
           serviceName: loyalty-level-service
           servicePort: 9080
