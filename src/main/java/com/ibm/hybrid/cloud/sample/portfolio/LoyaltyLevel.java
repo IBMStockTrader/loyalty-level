@@ -16,9 +16,6 @@
 
 package com.ibm.hybrid.cloud.sample.portfolio;
 
-//Security
-import java.security.Principal;
-
 //JMS 2.0
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -85,14 +82,9 @@ public class LoyaltyLevel extends Application {
 		if (!loyalty.equals(oldLoyalty)) try {
 			JsonObjectBuilder builder = Json.createObjectBuilder();
 
-			Principal principal = request.getUserPrincipal();
-			if (principal != null) {
-				System.out.println("principal.getName() = "+principal.getName());
-			} else {
-				System.out.println("principal is null");
-			}
-			System.out.println("remoteUser = "+request.getRemoteUser());
-				
+			String user = request.getRemoteUser(); //logged-in user
+			if (user != null) builder.add("id", user);
+
 			builder.add("owner", owner);
 			builder.add("old", oldLoyalty);
 			builder.add("new", loyalty);
