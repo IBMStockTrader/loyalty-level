@@ -38,6 +38,9 @@ import javax.json.JsonObjectBuilder;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+//Servlet 3.1
+import javax.servlet.http.HttpServletRequest;
+
 //JAX-RS 2.0 (JSR 339)
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
