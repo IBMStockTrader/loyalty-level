@@ -61,7 +61,7 @@ public class LoyaltyLevel extends Application {
     @Path("/")
 	@Produces("application/json")
 //	@RolesAllowed({"StockTrader", "StockViewer"}) //Couldn't get this to work; had to do it through the web.xml instead :(
-	public JsonObject getLoyalty(@QueryParam("owner") String owner, @QueryParam("loyalty") String oldLoyalty, @QueryParam("total") double total) {
+	public JsonObject getLoyalty(@QueryParam("owner") String owner, @QueryParam("loyalty") String oldLoyalty, @QueryParam("total") double total, @Context HttpServletRequest request) {
 		JsonObjectBuilder loyaltyLevel = Json.createObjectBuilder();
 
 		String loyalty = "Basic";
@@ -77,6 +77,15 @@ public class LoyaltyLevel extends Application {
 
 		if (!loyalty.equals(oldLoyalty)) try {
 			JsonObjectBuilder builder = Json.createObjectBuilder();
+
+			Principal principal = request.getUserPrincipal();
+			if (principal != null) {
+				System.out.println("principal.getName() = "+principal.getName());
+			} else {
+				System.out.println("principal is null");
+			}
+			System.out.println("remoteUser = "+request.getRemoteUser());
+				
 			builder.add("owner", owner);
 			builder.add("old", oldLoyalty);
 			builder.add("new", loyalty);
