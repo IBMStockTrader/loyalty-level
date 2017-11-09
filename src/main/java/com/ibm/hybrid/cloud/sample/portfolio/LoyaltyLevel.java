@@ -16,6 +16,9 @@
 
 package com.ibm.hybrid.cloud.sample.portfolio;
 
+//Security
+import java.security.Principal;
+
 //JMS 2.0
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -26,17 +29,18 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-//JNDI
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 //JSON-P (JSR 353).  The replaces my old usage of IBM's JSON4J (com.ibm.json.java.JSONObject)
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+//JNDI 1.0
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 //JAX-RS 2.0 (JSR 339)
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
