@@ -109,9 +109,10 @@ public class LoyaltyLevel extends Application {
 			Exception linked = jms.getLinkedException(); //get the nested exception from MQ
 			if (linked != null) logException(linked);
 		} catch (NamingException ne) { //in case MQ is not configured, just log the exception and continue
-			logger.warning("Unable to get lookup JMS managed resources from JNDI.  Ensure your server.xml is configured correctly.");
+			logger.warning("Unable to lookup JMS managed resources from JNDI.  Continuing without notification of change in loyalty level.");
 			logException(ne);
 		} catch (Throwable t) { //in case MQ is not configured, just log the exception and continue
+			logger.warning("An unexpected error occurred.  Continuing without notification of change in loyalty level.");
 			logException(t);
 		}
 
