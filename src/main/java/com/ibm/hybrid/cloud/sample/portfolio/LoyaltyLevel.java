@@ -16,6 +16,13 @@
 
 package com.ibm.hybrid.cloud.sample.portfolio;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+//Logging (JSR 47)
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 //JMS 2.0
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -54,6 +61,8 @@ import javax.ws.rs.Path;
  *  Also send a notification when status changes for a given user.
  */
 public class LoyaltyLevel extends Application {
+	private static Logger logger = Logger.getLogger(LoyaltyLevel.class.getName());
+
 	private static final String NOTIFICATION_Q   = "jms/Portfolio/NotificationQueue";
 	private static final String NOTIFICATION_QCF = "jms/Portfolio/NotificationQueueConnectionFactory";
 
@@ -78,8 +87,10 @@ public class LoyaltyLevel extends Application {
 		} else if (total > 10000.00) {
 			loyalty = "Bronze";
 		}
+		logger.fine("Loyalty level = "+loyalty);
 
 		if (!loyalty.equals(oldLoyalty)) try {
+			logger.fine("Change in loyalty level detected");
 			JsonObjectBuilder builder = Json.createObjectBuilder();
 
 			String user = request.getRemoteUser(); //logged-in user
@@ -93,11 +104,15 @@ public class LoyaltyLevel extends Application {
 
 			invokeJMS(message);
 		} catch (JMSException jms) { //in case MQ is not configured, just log the exception and continue
-			jms.printStackTrace();
-			Exception linked = jms.getLinkedException();
-			if (linked != null) linked.printStackTrace();
+			logger.warning("Unable to send message to JMS provider.  Continuing without notification of change in loyalty level.");
+			logException(jms);
+			Exception linked = jms.getLinkedException(); //get the nested exception from MQ
+			if (linked != null) logException(linked);
+		} catch (NamingException ne) { //in case MQ is not configured, just log the exception and continue
+			logger.warning("Unable to get lookup JMS managed resources from JNDI.  Ensure your server.xml is configured correctly.");
+			logException(ne);
 		} catch (Throwable t) { //in case MQ is not configured, just log the exception and continue
-			t.printStackTrace();
+			logException(t);
 		}
 
 		loyaltyLevel.add("owner", owner);
@@ -109,16 +124,16 @@ public class LoyaltyLevel extends Application {
 	/** Connect to the server, and lookup the managed resources. 
 	 */
 	private void initialize() throws NamingException {
-		System.out.println("Getting the InitialContext");
+		logger.fine("Getting the InitialContext");
 		InitialContext context = new InitialContext();
 
 		//lookup our JMS objects
-		System.out.println("Looking up our JMS resources");
+		logger.fine("Looking up our JMS resources");
 		queueCF = (QueueConnectionFactory) context.lookup(NOTIFICATION_QCF);
 		queue = (Queue) context.lookup(NOTIFICATION_Q);
 
 		initialized = true;
-		System.out.println("Initialization completed successfully!");
+		logger.fine("JMS Initialization completed successfully!");
 	}
 
 	/** Send a JSON message to our notification queue.
@@ -126,13 +141,15 @@ public class LoyaltyLevel extends Application {
 	public void invokeJMS(JsonObject json) throws JMSException, NamingException {
 		if (!initialized) initialize(); //gets our JMS managed resources (Q and QCF)
 
+		logger.fine("Preparing to send a JMS message");
+
 		QueueConnection connection = queueCF.createQueueConnection();
 		QueueSession session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 		String contents = json.toString();
 		TextMessage message = session.createTextMessage(contents);
 
-		System.out.println("Sending "+contents+" to "+queue.getQueueName());
+		logger.fine("Sending "+contents+" to "+queue.getQueueName());
 
 		//"mqclient" group needs "put" authority on the queue for next two lines to work
 		QueueSender sender = session.createSender(queue);
@@ -142,6 +159,17 @@ public class LoyaltyLevel extends Application {
 		session.close();
 		connection.close();
 
-		System.out.println("Message sent successfully!");
+		logger.info("JMS Message sent successfully!");
+	}
+
+	private static void logException(Throwable t) {
+		logger.warning(t.getClass().getName()+": "+t.getMessage());
+
+		//only log the stack trace if the level has been set to at least FINE
+		if (logger.isLoggable(Level.FINE)) {
+			StringWriter writer = new StringWriter();
+			t.printStackTrace(new PrintWriter(writer));
+			logger.fine(writer.toString());
+		}
 	}
 }
