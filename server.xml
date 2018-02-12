@@ -1,19 +1,31 @@
 <server description="Loyalty Level server">
     <featureManager>
-        <feature>microProfile-1.2</feature>
+        <feature>microProfile-1.2</feature> <!-- defines mpJwt-1.0, among others -->
         <feature>jndi-1.0</feature>
         <feature>jca-1.7</feature>
         <feature>jms-2.0</feature>
         <feature>appSecurity-2.0</feature>
-        <feature>ldapRegistry-3.0</feature>
+<!--    <feature>ldapRegistry-3.0</feature> -->
+<!--    <feature>wasJmsClient-2.0</feature> -->
         <feature>logstashCollector-1.0</feature>
     </featureManager>
 
+    <logging traceSpecification="*=info" consoleLogLevel="INFO"/>
+
     <httpEndpoint httpPort="9080" httpsPort="9443" host="*" id="defaultHttpEndpoint"/>
 
-    <keyStore id="defaultKeyStore" password="passw0rd"/>
+    <keyStore id="defaultKeyStore" password="passw0rd" type="jks"
+         location="${server.config.dir}/resources/security/key.jks" />
 
-    <logging consoleLogLevel="INFO" traceSpecification="*=info"/>
+    <sslDefault sslRef="RpSSLConfig" />
+
+    <ssl id="RpSSLConfig" keyStoreRef="defaultKeyStore" />
+
+    <mpJwt id="myMpJwt" audiences="${env.JWT_AUDIENCE}" issuer="${env.JWT_ISSUER}" keyName="default"/>
+
+<!--
+    <logstashCollector source="message,trace,ffdc,accessLog" hostName="logstash" port="5044"/>
+-->
 
     <authData id="MQ-Credentials" user="${env.MQ_ID}" password="${env.MQ_PASSWORD}"></authData>
 
@@ -61,13 +73,13 @@
     </administrator-role>
 -->
 
-    <!-- Define an LDAP configuration for BluePages. -->
+    <!-- Define an LDAP configuration for BluePages.
     <ldapRegistry ldapType="IBM Tivoli Directory Server" host="bluepages.ibm.com" port="389" baseDN="o=ibm.com" realm="BluePages">
         <idsFilters userFilter="(&amp;(emailAddress=%v)(objectclass=person))"
             groupFilter="(&amp;(cn=%v)(|(objectclass=groupOfNames)(objectclass=groupOfUniqueNames)(objectclass=groupOfURLs)))"/>
-    </ldapRegistry>
+    </ldapRegistry> -->
 
-    <ltpa expiration="1h"/>
+    <ltpa expiration="1h"/> -->
 
     <webAppSecurity allowFailOverToBasicAuth="true" displayAuthenticationRealm="true" logoutOnHttpSessionExpire="true"
         webAlwaysLogin="true" preserveFullyQualifiedReferrerUrl="true" trackLoggedOutSSOCookies="true" ssoCookieName="StockTraderSSO"
@@ -76,7 +88,7 @@
     <webApplication id="LoyaltyLevel" name="LoyaltyLevel" location="LoyaltyLevel.war" contextRoot="/loyalty-level">
         <application-bnd>
             <security-role id="StockTrader" name="StockTrader">
-                <special-subject type="ALL_AUTHENTICATED_USERS" id="bluePagesUsers"/>
+                <special-subject type="ALL_AUTHENTICATED_USERS" id="IBMid"/>
             </security-role>
         </application-bnd>
     </webApplication>
