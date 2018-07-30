@@ -19,11 +19,11 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 {{ if .Values.istio.enabled }}
 {{ else }}
-        readinessProbe:
-          httpGet:
-            path: /loyaltylevel/health
-            port: 9080
-          initialDelaySeconds: 20
+#        readinessProbe:
+#          httpGet:
+#            path: /loyaltylevel/health
+#            port: 9080
+#          initialDelaySeconds: 20
 {{ end }}
         resources:
           requests:
