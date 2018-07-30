@@ -1,4 +1,4 @@
 apiVersion: v1
 description: A Helm chart for Kubernetes
-name: loyaltylevel
+name: loyalty-level
 version: 1.0.0
