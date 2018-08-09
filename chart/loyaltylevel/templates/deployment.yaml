@@ -4,6 +4,7 @@ metadata:
   name: "{{  .Chart.Name }}-deployment"
   labels:
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    solution: "stock-trader"
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
@@ -12,6 +13,7 @@ spec:
       labels:
         app: "{{  .Chart.Name }}-selector"
         version: "current"
+        solution: "stock-trader"
     spec:
       containers:
       - name: "{{  .Chart.Name  }}"
