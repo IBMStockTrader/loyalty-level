@@ -30,7 +30,7 @@ spec:
       containers:
       - name: loyalty-level
 #       image: loyalty-level:latest # Microservice Builder
-        image: mycluster.icp:8500/stock-trader/loyalty-level:latest # IBM Cloud Private
+        image: ibmstocktrader/loyalty-level:latest # IBM Cloud Private
 #       image: registry.ng.bluemix.net/stock_trader/loyalty-level:latest # IBM Container Service
         env:
           - name: MQ_ID
