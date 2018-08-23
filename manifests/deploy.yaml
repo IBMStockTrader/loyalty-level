@@ -29,8 +29,9 @@ spec:
     spec:
       containers:
       - name: loyalty-level
-#       image: loyalty-level:latest # Microservice Builder
-        image: ibmstocktrader/loyalty-level:latest # IBM Cloud Private
+#       Note: this manifests/deploy.yaml will be used when we want to deploy this directly using kubectl or a helm chart. 
+#             Microclimate uses the Charts folder so we can actually have both options
+        image: ibmstocktrader/loyalty-level:latest # Pull from docker hub by default
 #       image: registry.ng.bluemix.net/stock_trader/loyalty-level:latest # IBM Container Service
         env:
           - name: MQ_ID
