@@ -14,8 +14,8 @@
 
 # FROM openliberty/open-liberty:microProfile1
 FROM websphere-liberty:microProfile
-COPY server.xml /config/server.xml
-COPY wmq.jmsra.rar /config/wmq.jmsra.rar
+COPY src/main/liberty/config/server.xml /config/server.xml
+COPY target/prereqs/wmq.jmsra-*.rar /config/wmq.jmsra.rar
 COPY target/loyalty-level-1.0-SNAPSHOT.war /config/apps/LoyaltyLevel.war
 COPY key.jks /config/resources/security/key.jks
 # COPY validationKeystore.jks /config/resources/security/validationKeystore.jks
